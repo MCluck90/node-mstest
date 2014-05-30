@@ -1,0 +1,17 @@
+{
+    "name": "mstest",
+    "version": "0.1.0",
+    "description": "Provides an interface for the mstest command line utility",
+    "author": "Mike Cluck <mcluck90@gmail.com>",
+    "main": "main.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/MCluck90/node-mstest"
+    },
+    "keywords": [
+        "mstest",
+        "microsoft",
+        "tfs"
+    ],
+    "license": "MIT"
+}
