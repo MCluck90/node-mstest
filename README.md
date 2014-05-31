@@ -69,7 +69,7 @@ msTest.runTests({
 * **runTests**( *object* **[options]** ): Runs the tests with the current settings
     * *function( TestResult )* **[options.eachTest]:** Called after each test is completed
     * *function( TestResult[] results, TestResult[] passed, TestResult[] failed )* **[options.done]:** Called after all of the tests have run
-    * *function(\*)* **[options.error]:**  Called when an error happens
+    * *function( * )* **[options.error]:**  Called when an error happens
 
 
   [1]: http://msdn.microsoft.com/en-us/library/ms182489.aspx

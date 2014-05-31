@@ -321,7 +321,7 @@ MSTest.prototype.runTests = function(options) {
     this._log('CMD: ' + this.exePath + ' ' + msTestArgs.join(' '));
 
     // Fire it up!
-    var parser = new Parser(this.exePath, msTestArgs, this.workingDir);
+    var parser = new Parser(this.exePath, msTestArgs, this.workingDir, Object.keys(this.details));
     parser.on('test', options.eachTest);
     parser.on('done', options.done);
     parser.on('error', options.error);
