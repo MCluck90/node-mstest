@@ -48,12 +48,14 @@ function isAttribute(line) {
  * @param {string}      exePath         Path to mstest.exe
  * @param {string[]}    args            Additional arguments
  * @param {string}      [workingDir]    Working directory for tests
+ * @param {string[]}    [detailsMap]    Map details to user-defined property names
  * @constructor
  */
-var Parser = function(exePath, args, workingDir) {
+var Parser = function(exePath, args, workingDir, detailsMap) {
     this.results = [];
     this.passedTests = [];
     this.failedTests = [];
+    this.detailsMap = detailsMap;
     var self = this,
         spawnOptions = {},
         latestResult = null,
@@ -107,7 +109,7 @@ var Parser = function(exePath, args, workingDir) {
             } else if (isAttribute(line)) {
                 // Just in case we've been building up another attribute
                 if (latestAttribute.value.length > 0) {
-                    latestResult[latestAttribute.key] = latestAttribute.value;
+                    self._setAttribute(latestResult, latestAttribute.key, latestAttribute.value);
                 }
 
                 var keyAndValue = line.split(' = '),
@@ -141,12 +143,18 @@ var Parser = function(exePath, args, workingDir) {
 
 Parser.prototype = Object.create(EventEmitter.prototype);
 
+/**
+ * Adds a new test result
+ * @param {TestResult}  result
+ * @param {object}      attribute
+ * @private
+ */
 Parser.prototype._pushResult = function(result, attribute) {
     if (result === null) {
         return;
     }
     if (attribute.value.length > 0) {
-        result[attribute.key] = attribute.value;
+        this._setAttribute(result, attribute.key, attribute.value);
     }
     attribute.key = '';
     attribute.value = '';
@@ -159,6 +167,21 @@ Parser.prototype._pushResult = function(result, attribute) {
         this.failedTests.push(result);
     }
     this.emit('test', result);
+};
+
+/**
+ * Sets an attribute
+ * @param {TestResult}  result
+ * @param {string}      key
+ * @param {*}           value
+ * @private
+ */
+Parser.prototype._setAttribute = function(result, key, value) {
+    var index = this.detailsMap.indexOf(key.toLowerCase());
+    if (index !== -1) {
+        key = this.detailsMap[index];
+    }
+    result[key] = value;
 };
 
 module.exports = Parser;

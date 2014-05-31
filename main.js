@@ -249,6 +249,7 @@ MSTest.prototype.dontPublish = function() {
  * @param {function(TestResult)}    [options.eachTest]  Called for every test result
  * @param {function(TestResult[])}  [options.done]      Called after all the tests have completed
  * @param {function(Error)}         [options.error]     Called if there was an error in the parser
+ * @returns {MSTest}
  */
 MSTest.prototype.runTests = function(options) {
     options = options || {};
@@ -324,6 +325,7 @@ MSTest.prototype.runTests = function(options) {
     parser.on('test', options.eachTest);
     parser.on('done', options.done);
     parser.on('error', options.error);
+    return this;
 };
 
 Object.defineProperty(MSTest.prototype, 'testContainer', {
