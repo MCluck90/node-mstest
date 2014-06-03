@@ -177,10 +177,13 @@ Parser.prototype._pushResult = function(result, attribute) {
  * @private
  */
 Parser.prototype._setAttribute = function(result, key, value) {
-    var index = this.detailsMap.indexOf(key.toLowerCase());
-    if (index !== -1) {
-        key = this.detailsMap[index];
+    for (var i = 0, len = this.detailsMap.length; i < len; i++) {
+        if (this.detailsMap[i].toLowerCase() === key) {
+            key = this.detailsMap[i];
+            break;
+        }
     }
+
     result[key] = value;
 };
 
