@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs'),
 	path = require('path'),
 	Parser = require('./parser.js'),
@@ -300,7 +302,7 @@ MSTest.prototype.runTests = function(options) {
 	// Add all extra details
 	for (var detail in this.details) {
         if (this.details[detail]) {
-		    msTestArgs.push('/detail:' + detail.toLowerCase());
+            msTestArgs.push('/detail:' + detail.toLowerCase());
         }
 	}
 
@@ -356,7 +358,7 @@ Object.defineProperty(MSTest.prototype, 'exePath', {
 		}
 		
 		// Environment variables for VS tools
-		var vsToolsVariables = [
+        var vsToolsVariables = [
 				process.env.VS120COMNTOOLS,
 				process.env.VS110COMNTOOLS,
 				process.env.VS100COMNTOOLS

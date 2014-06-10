@@ -1,3 +1,5 @@
+'use strict';
+
 var spawn = require('child_process').spawn,
     EventEmitter = require('events').EventEmitter;
 
@@ -16,7 +18,7 @@ function isBeginMarker(line) {
  * @returns {boolean}
  */
 function isEndMarker(line) {
-    return /\d/.test(line[0]) || line.indexOf("Final Test Results") === 0;
+    return (/\d/).test(line[0]) || line.indexOf('Final Test Results') === 0;
 }
 
 /**
@@ -188,3 +190,10 @@ Parser.prototype._setAttribute = function(result, key, value) {
 };
 
 module.exports = Parser;
+
+/**
+ * @name TestResult
+ * @property {string} status
+ * @property {boolean} passed
+ * @property {string} @detailName
+ */
