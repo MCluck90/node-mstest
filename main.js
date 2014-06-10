@@ -312,7 +312,7 @@ MSTest.prototype.runTests = function(options) {
         msTestArgs.push('/publishbuild:' + this._publish.buildName);
         msTestArgs.push('/flavor:' + this._publish.flavor);
         msTestArgs.push('/platform:' + this._publish.platform);
-        msTestArgs.push('/teamproject:"' + this._publish.teamProject + '"');
+        msTestArgs.push('/teamproject:' + this._publish.teamProject + '');
         if (this._publish.resultsFile) {
             msTestArgs.push('/publishresultsfile:"' + this._publish.resultsFile + '"');
         }
