@@ -16,7 +16,7 @@ function isBeginMarker(line) {
  * @returns {boolean}
  */
 function isEndMarker(line) {
-    return /\d/.test(line[0]);
+    return /\d/.test(line[0]) || line.indexOf("Final Test Results") === 0;
 }
 
 /**
