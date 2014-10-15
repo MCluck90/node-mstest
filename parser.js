@@ -136,7 +136,7 @@ var Parser = function(exePath, args, workingDir, detailsMap) {
         }
     });
     child.stderr.on('data', function(err) {
-        self.emit('error', err);
+        self.emit('error', err.toString());
     });
     child.on('close', function() {
         self.emit('done', self.results, self.passedTests, self.failedTests);

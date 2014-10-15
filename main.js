@@ -59,6 +59,7 @@ var MSTest = function() {
 	};
 	
 	this.debugLog = false;
+	this.useStdErr = false;
 };
 
 /**
@@ -297,6 +298,11 @@ MSTest.prototype.runTests = function(options) {
 	// Save the results somewhere special
 	if (this.resultsFile) {
 		msTestArgs.push('/resultsfile:"' + this.resultsFile + '"');
+	}
+
+	// Use standard error to ouput error information that may occur attempting to run the test
+	if (this.useStdErr) {
+		msTestArgs.push('/usestderr');
 	}
 
 	// Add all extra details
