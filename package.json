@@ -1,8 +1,13 @@
 {
     "name": "mstest",
-    "version": "0.1.4",
+    "version": "0.2.0",
     "description": "Provides an interface for the mstest command line utility",
     "author": "Mike Cluck <mcluck90@gmail.com>",
+    "contributors": [
+        {
+            "name": "Nolan Woods"
+        }
+    ],
     "main": "main.js",
     "repository": {
         "type": "git",
