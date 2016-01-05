@@ -365,6 +365,7 @@ Object.defineProperty(MSTest.prototype, 'exePath', {
 		
 		// Environment variables for VS tools
         var vsToolsVariables = [
+				process.env.VS140COMNTOOLS,
 				process.env.VS120COMNTOOLS,
 				process.env.VS110COMNTOOLS,
 				process.env.VS100COMNTOOLS
