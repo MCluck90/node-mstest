@@ -39,6 +39,7 @@ msTest.runTests({
 * *string* **resultsFile:** Where to save the results
 * *bool* **debugLog:** (Default: false) If true, will print out simple debug messages to stdout
 * *bool* **useStdErr:** (Default: false) If true, mstest will output its error messages to stderr instead of stdout, which can be caught and handled with the `options.error` callback of `runTests()`
+* *string* **language:** (Default: "en") if mstest.exe is non-english, choose another language from localization.json
 * *object* **details:** Each key that is set to true will be treated as an additional detail. Keys are converted to lowercase when processing. See [Microsoft's MSTest.exe Command-Line Options][1] for a list of any valid details. Below is listed some examples
     * *bool* **duration**
     * *bool* **errorMessage/errormessage**
