@@ -1,0 +1,14 @@
+{
+  "en": {
+    "Passed": "Passed",
+    "Failed": "Failed",
+    "Inconclusive": "Inconclusive",
+    "FinalTestResults": "Final Test Results"
+  },
+  "fr": {
+    "Passed": "Réussite",
+    "Failed": "Échec",
+    "Inconclusive": "Non concluant",
+    "FinalTestResults": "Résultats de tests finaux???"
+  }
+}

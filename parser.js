@@ -1,5 +1,8 @@
 'use strict';
 
+var localizationTable = require('./localization.json');
+
+
 var spawn = require('child_process').spawn,
     EventEmitter = require('events').EventEmitter;
 
@@ -18,7 +21,7 @@ function isBeginMarker(line) {
  * @returns {boolean}
  */
 function isEndMarker(line) {
-    return (/\d/).test(line[0]) || line.indexOf('Final Test Results') === 0;
+    return (/\d/).test(line[0]) || line.indexOf(this.translatedMessages.FinalTestResults) === 0;
 }
 
 /**
@@ -27,7 +30,7 @@ function isEndMarker(line) {
  * @returns {boolean}
  */
 function isNewTest(line) {
-    var possibleResults = ['Passed', 'Failed', 'Inconclusive'];
+    var possibleResults = [this.translatedMessages.Passed, this.translatedMessages.Failed, this.translatedMessages.Inconclusive];
     for (var i = 0, len = possibleResults.length; i < len; i++) {
         if (line.indexOf(possibleResults[i]) === 0) {
             return true;
@@ -42,6 +45,7 @@ function isNewTest(line) {
  * @returns {boolean}
  */
 function isAttribute(line) {
+    //return line.indexOf("\t") != 0;
     return line.indexOf('[') === 0;
 }
 
@@ -53,11 +57,23 @@ function isAttribute(line) {
  * @param {string[]}    [detailsMap]    Map details to user-defined property names
  * @constructor
  */
-var Parser = function(exePath, args, workingDir, detailsMap) {
+var Parser = function (exePath, args, workingDir, detailsMap, language) {
     this.results = [];
     this.passedTests = [];
     this.failedTests = [];
     this.detailsMap = detailsMap;
+    this.language = language || 'en';
+    this.translatedMessages = localizationTable[this.language];
+
+    this.isAttribute = isAttribute;
+    this.isNewTest = isNewTest;
+    this.isEndMarker = isEndMarker;
+    this.isBeginMarker = isBeginMarker;
+
+    if (this.translatedMessages === undefined) {
+        this.translatedMessages = localizationTable['en'];
+    }
+
     var self = this,
         spawnOptions = {},
         latestResult = null,
@@ -72,7 +88,7 @@ var Parser = function(exePath, args, workingDir, detailsMap) {
         spawnOptions.cwd = workingDir;
     }
     child = spawn(exePath, args, spawnOptions);
-    child.stdout.on('data', function(data) {
+    child.stdout.on('data', function (data) {
         data = data.toString();
 
         // Skip the rest if we've already stopped parsing
@@ -91,9 +107,9 @@ var Parser = function(exePath, args, workingDir, detailsMap) {
 
             // Don't start parsing until we see results
             if (!startParsing) {
-                startParsing = isBeginMarker(line);
+                startParsing = self.isBeginMarker(line);
                 continue;
-            } else if (isEndMarker(line)) {
+            } else if (self.isEndMarker(line)) {
                 stopParsing = true;
                 // Push in the last result
                 self._pushResult(latestResult, latestAttribute);
@@ -101,14 +117,14 @@ var Parser = function(exePath, args, workingDir, detailsMap) {
             }
 
             // Start parsing a new test result
-            if (isNewTest(line)) {
+            if (self.isNewTest(line)) {
                 self._pushResult(latestResult, latestAttribute);
                 var statusAndName = line.split(/ +/);
                 latestResult = {
                     status: statusAndName[0],
                     name: statusAndName[1]
                 };
-            } else if (isAttribute(line)) {
+            } else if (self.isAttribute(line)) {
                 // Just in case we've been building up another attribute
                 if (latestAttribute.value.length > 0) {
                     self._setAttribute(latestResult, latestAttribute.key, latestAttribute.value);
@@ -135,10 +151,10 @@ var Parser = function(exePath, args, workingDir, detailsMap) {
             }
         }
     });
-    child.stderr.on('data', function(err) {
+    child.stderr.on('data', function (err) {
         self.emit('error', err.toString());
     });
-    child.on('close', function() {
+    child.on('close', function () {
         self.emit('done', self.results, self.passedTests, self.failedTests);
     });
 };
@@ -151,7 +167,7 @@ Parser.prototype = Object.create(EventEmitter.prototype);
  * @param {object}      attribute
  * @private
  */
-Parser.prototype._pushResult = function(result, attribute) {
+Parser.prototype._pushResult = function (result, attribute) {
     if (result === null) {
         return;
     }
@@ -161,7 +177,7 @@ Parser.prototype._pushResult = function(result, attribute) {
     attribute.key = '';
     attribute.value = '';
     this.results.push(result);
-    if (result.status === 'Passed') {
+    if (result.status === this.translatedMessages.Passed) {
         result.passed = true;
         this.passedTests.push(result);
     } else {
@@ -178,7 +194,7 @@ Parser.prototype._pushResult = function(result, attribute) {
  * @param {*}           value
  * @private
  */
-Parser.prototype._setAttribute = function(result, key, value) {
+Parser.prototype._setAttribute = function (result, key, value) {
     for (var i = 0, len = this.detailsMap.length; i < len; i++) {
         if (this.detailsMap[i].toLowerCase() === key) {
             key = this.detailsMap[i];
